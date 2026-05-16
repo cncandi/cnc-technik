@@ -1,17 +1,12 @@
 [build]
   command = "npm run build"
   publish = "dist"
+  ignore = "exit 0"
 
 [build.environment]
   NODE_VERSION = "22"
   PUBLIC_BASE_PATH = "/"
 
-[[redirects]]
-  from = "/admin/*"
-  to = "/admin/index.html"
-  status = 200
-
-[[redirects]]
-  from = "/*"
-  to = "/404.html"
-  status = 404
+# Netlify ist als Vorschau/Deployment bewusst deaktiviert.
+# Die weitere Vorschau erfolgt ueber GitHub Pages.
+# Der spaetere Livegang erfolgt ueber GitHub Actions und FTP.
