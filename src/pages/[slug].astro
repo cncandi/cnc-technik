@@ -1,0 +1,50 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { sitePath } from '../utils/path';
+
+export async function getStaticPaths() {
+  const pages = await getCollection('pages');
+  return pages.map((page) => ({
+    params: { slug: page.data.slug },
+    props: { page },
+  }));
+}
+
+const { page } = Astro.props;
+const { Content } = await render(page);
+---
+<BaseLayout title={page.data.title} description={page.data.description}>
+  <section class="hero">
+    <div class="container hero-grid">
+      <div>
+        {page.data.eyebrow && <span class="eyebrow">{page.data.eyebrow}</span>}
+        <h1>{page.data.title}</h1>
+        <p class="lead">{page.data.description}</p>
+        <div class="hero-actions">
+          <a class="button" href={sitePath(page.data.ctaHref ?? '/kontakt')}>{page.data.ctaLabel ?? 'Kontakt aufnehmen'}</a>
+          {page.data.secondaryCtaHref && page.data.secondaryCtaLabel && (
+            <a class="button secondary" href={sitePath(page.data.secondaryCtaHref)}>{page.data.secondaryCtaLabel}</a>
+          )}
+        </div>
+      </div>
+      <aside class="hero-card">
+        <strong>Fokus</strong>
+        <span>klare Landingpage mit Nutzen, Anwendungen, Vertrauen und Anfrageziel</span>
+      </aside>
+    </div>
+  </section>
+
+  <section class="content-page">
+    <div class="container content-wrap">
+      <article class="prose">
+        <Content />
+      </article>
+      <aside class="aside">
+        <h3>Projekt besprechen</h3>
+        <p>Diese Seite ist ein erster Inhaltsentwurf. Texte, Bilder, Referenzen, Downloads und Formulare können nun gezielt ergänzt werden.</p>
+        <a class="button" href={sitePath('/kontakt')}>Demo / Rückruf anfragen</a>
+      </aside>
+    </div>
+  </section>
+</BaseLayout>

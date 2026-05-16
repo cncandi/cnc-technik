@@ -1,0 +1,77 @@
+---
+import '../styles/global.css';
+import { sitePath } from '../utils/path';
+
+interface Props {
+  title: string;
+  description: string;
+}
+
+const { title, description } = Astro.props;
+const pageTitle = title.includes('CNC-Technik') ? title : `${title} | CNC-Technik Reitz`;
+---
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href={sitePath('/favicon.svg')} />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="logo" href={sitePath('/')} aria-label="Zur Startseite">
+          <span class="logo-mark">CR</span>
+          <span>CNC-Technik Reitz<small>CAD/CAM · Robotik · P3D</small></span>
+        </a>
+        <nav class="nav" aria-label="Hauptnavigation">
+          <a href={sitePath('/ency')}>ENCY</a>
+          <a href={sitePath('/robotik')}>Robotik</a>
+          <a href={sitePath('/kuka')}>KUKA</a>
+          <a href={sitePath('/p3d-slicer')}>P3D Slicer</a>
+          <a href={sitePath('/solidworks')}>SOLIDWORKS</a>
+          <a href={sitePath('/kontakt')}>Kontakt</a>
+        </nav>
+        <a class="button" href={sitePath('/kontakt')}>Demo anfragen</a>
+      </div>
+    </header>
+
+    <main>
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-grid">
+        <div>
+          <h3>CNC-Technik Reitz</h3>
+          <p>CAD/CAM-Systeme, Robotik, Postprozessoren und eigene Softwareentwicklung aus Breidenstein bei Marburg.</p>
+        </div>
+        <div>
+          <h4>Software</h4>
+          <div class="footer-links">
+            <a href={sitePath('/ency')}>ENCY CAD/CAM</a>
+            <a href={sitePath('/p3d-slicer')}>P3D Slicer</a>
+            <a href={sitePath('/solidworks')}>SOLIDWORKS</a>
+          </div>
+        </div>
+        <div>
+          <h4>Kompetenz</h4>
+          <div class="footer-links">
+            <a href={sitePath('/robotik')}>Roboterprogrammierung</a>
+            <a href={sitePath('/postprozessoren')}>Postprozessoren</a>
+            <a href={sitePath('/schulung-support')}>Schulung & Support</a>
+          </div>
+        </div>
+        <div>
+          <h4>Kontakt</h4>
+          <div class="footer-links">
+            <a href={sitePath('/kontakt')}>Projekt besprechen</a>
+            <a href="https://www.cnc-technik.de">Aktuelle Live-Seite</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
