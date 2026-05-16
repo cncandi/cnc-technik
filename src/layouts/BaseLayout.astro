@@ -23,18 +23,19 @@ const pageTitle = title.includes('CNC-Technik') ? title : `${title} | CNC-Techni
     <header class="site-header">
       <div class="container header-inner">
         <a class="logo" href={sitePath('/')} aria-label="Zur Startseite">
-          <span class="logo-mark">CR</span>
-          <span>CNC-Technik Reitz<small>CAD/CAM · Robotik · P3D</small></span>
+          <span class="logo-mark">DTR</span>
+          <span>Datentechnik Reitz<small>CAD/CAM · CNC · Robotik</small></span>
         </a>
         <nav class="nav" aria-label="Hauptnavigation">
-          <a href={sitePath('/ency')}>ENCY</a>
+          <a href={sitePath('/ueber-uns')}>Über uns</a>
+          <a href={sitePath('/ency')}>CAD/CAM</a>
           <a href={sitePath('/robotik')}>Robotik</a>
-          <a href={sitePath('/kuka')}>KUKA</a>
-          <a href={sitePath('/p3d-slicer')}>P3D Slicer</a>
-          <a href={sitePath('/solidworks')}>SOLIDWORKS</a>
+          <a href={sitePath('/p3d-slicer')}>P3D</a>
+          <a href={sitePath('/schulung-support')}>Support</a>
+          <a href={sitePath('/news')}>News</a>
           <a href={sitePath('/kontakt')}>Kontakt</a>
         </nav>
-        <a class="button" href={sitePath('/kontakt')}>Demo anfragen</a>
+        <a class="button" href={sitePath('/kontakt')}>Beratung anfragen</a>
       </div>
     </header>
 
@@ -45,30 +46,35 @@ const pageTitle = title.includes('CNC-Technik') ? title : `${title} | CNC-Techni
     <footer class="site-footer">
       <div class="container footer-grid">
         <div>
-          <h3>CNC-Technik Reitz</h3>
-          <p>CAD/CAM-Systeme, Robotik, Postprozessoren und eigene Softwareentwicklung aus Breidenstein bei Marburg.</p>
+          <h3>CAD/CAM Systeme Datentechnik Reitz GmbH & Co. KG</h3>
+          <p>Effiziente CAD/CAM- und Robotiklösungen für CNC-Maschinen, Industrieroboter und moderne Fertigungsprozesse.</p>
+          <p>Perfstraße 2 · 35216 Breidenstein</p>
         </div>
         <div>
-          <h4>Software</h4>
+          <h4>Navigation</h4>
           <div class="footer-links">
-            <a href={sitePath('/ency')}>ENCY CAD/CAM</a>
-            <a href={sitePath('/p3d-slicer')}>P3D Slicer</a>
-            <a href={sitePath('/solidworks')}>SOLIDWORKS</a>
+            <a href={sitePath('/ueber-uns')}>Über uns</a>
+            <a href={sitePath('/ency')}>CAD/CAM Lösungen</a>
+            <a href={sitePath('/robotik')}>Robotik</a>
+            <a href={sitePath('/news')}>News</a>
           </div>
         </div>
         <div>
-          <h4>Kompetenz</h4>
+          <h4>Leistungen</h4>
           <div class="footer-links">
-            <a href={sitePath('/robotik')}>Roboterprogrammierung</a>
+            <a href={sitePath('/p3d-slicer')}>P3D Slicer</a>
             <a href={sitePath('/postprozessoren')}>Postprozessoren</a>
+            <a href={sitePath('/sonderentwicklung')}>Sonderentwicklung</a>
             <a href={sitePath('/schulung-support')}>Schulung & Support</a>
           </div>
         </div>
         <div>
           <h4>Kontakt</h4>
           <div class="footer-links">
-            <a href={sitePath('/kontakt')}>Projekt besprechen</a>
-            <a href="https://www.cnc-technik.de">Aktuelle Live-Seite</a>
+            <a href="tel:+4964617593437">+49 (6461) 759 343 7</a>
+            <a href="mailto:info@cnc-technik.de">info@cnc-technik.de</a>
+            <a href={sitePath('/kontakt')}>Kontaktformular</a>
+            <a href="https://dtr.zendesk.com/">Zendesk Support</a>
           </div>
         </div>
       </div>
