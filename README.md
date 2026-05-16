@@ -30,6 +30,10 @@ npm run build
 npm run preview
 ```
 
+## Netlify
+
+Die Netlify-Seite wird durch Änderungen im `main`-Branch automatisch neu gebaut.
+
 ## GitHub Pages
 
 Der Workflow liegt unter:
