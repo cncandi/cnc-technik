@@ -4,63 +4,85 @@ import { sitePath } from '../utils/path';
 
 const cards = [
   {
-    title: 'ENCY CAD/CAM',
-    text: 'Moderne CAD/CAM-Programmierung für CNC-Maschinen, Dreh-Fräs-Zentren und anspruchsvolle Fertigungsprozesse.',
+    title: 'CAD/CAM Software',
+    text: 'ENCY und CAM-Lösungen für Fräsen, Drehen, Erodieren, Schneiden, Simulation und komplexe CNC-Prozesse.',
     href: '/ency',
   },
   {
-    title: 'Robotik & CAM',
-    text: 'Roboterprogrammierung, Simulation, Zusatzachsen, Postprozessoren und Prozessberatung für Industrieanwendungen.',
+    title: 'Robotik',
+    text: 'Roboterprogrammierung, Bahnplanung, Simulation und Automatisierung für KUKA, ABB, FANUC, Stäubli, Yaskawa und weitere Hersteller.',
     href: '/robotik',
   },
   {
     title: 'P3D Slicer',
-    text: 'Slicing-Technologie für Roboter, 5-Achs-Anlagen, Non-Planar-Druck und großformatige additive Fertigung.',
+    text: 'Software für Roboter- und 5-Achs-Fertigung mit nicht-planaren Strategien und komplexen Freiformbahnen.',
     href: '/p3d-slicer',
   },
   {
-    title: 'KUKA KRL Editor',
-    text: 'Spezialseite für KUKA-Anwender mit KRL-Beispielen, Editor-Konzept und späterer KI-Unterstützung.',
-    href: '/kuka',
+    title: 'Simulation & Optimierung',
+    text: 'Virtuelle Prüfung, Maschinen- und Robotermodelle, Kollisionskontrolle und Prozesssicherheit vor der realen Fertigung.',
+    href: '/postprozessoren',
   },
   {
-    title: 'SOLIDWORKS & Dassault',
-    text: 'Beratung und Einführung von SOLIDWORKS, DELMIA, CATIA und weiteren Dassault-Lösungen.',
-    href: '/solidworks',
+    title: 'Sonderentwicklung',
+    text: 'Individuelle Softwarelösungen, Schnittstellen, Tools und kundenspezifische Erweiterungen für besondere Anforderungen.',
+    href: '/sonderentwicklung',
   },
   {
     title: 'Schulung & Support',
-    text: 'Praxisorientierte Unterstützung für CAD/CAM, CNC, Robotik, Postprozessoren und Fertigungsprozesse.',
+    text: 'Individuelle Trainings, Support und Projektbegleitung durch erfahrene Anwendungstechniker aus der Fertigungspraxis.',
     href: '/schulung-support',
   },
 ];
+
+const benefits = [
+  'Über 30 Jahre Erfahrung',
+  'Über 1.000 betreute Kunden',
+  'CAD/CAM, CNC und Robotik aus einer Hand',
+  'Eigene Softwareentwicklung und Sonderlösungen',
+];
 ---
-<BaseLayout title="CNC-Technik Reitz" description="CAD/CAM, Robotik, ENCY, SOLIDWORKS und P3D Slicer von CAD/CAM Systeme Datentechnik Reitz.">
+<BaseLayout title="Effiziente CAD/CAM- und Robotiklösungen" description="Von der Simulation bis zur Automation: CAD/CAM, CNC, ENCY, P3D Slicer, Robotik und Support von Datentechnik Reitz.">
   <section class="hero">
     <div class="container hero-grid">
       <div>
-        <span class="eyebrow">CAD/CAM · Robotik · Softwareentwicklung</span>
-        <h1>Software und Beratung für moderne CNC- und Roboterfertigung.</h1>
-        <p class="lead">CNC-Technik Reitz unterstützt Unternehmen seit 1994 bei CAD/CAM, Robotik, Postprozessoren, ENCY, SOLIDWORKS und eigener Software wie P3D Slicer.</p>
+        <span class="eyebrow">Seit 1994 · CAD/CAM · CNC · Robotik</span>
+        <h1>Effiziente CAD/CAM- & Robotiklösungen für Ihre Fertigung.</h1>
+        <p class="lead">Von der Simulation bis zur Automation: Datentechnik Reitz unterstützt Fertigungsunternehmen mit ENCY, P3D Slicer, SOLIDWORKS, Robotik, Postprozessoren, Schulung und Support.</p>
         <div class="hero-actions">
-          <a class="button" href={sitePath('/kontakt')}>Projekt besprechen</a>
-          <a class="button secondary" href={sitePath('/robotik')}>Robotik ansehen</a>
+          <a class="button" href={sitePath('/kontakt')}>Beratung anfragen</a>
+          <a class="button secondary" href="http://datentechnik-reitz.ddns.net:8000/download-center/downloads.html">Download</a>
         </div>
       </div>
       <aside class="hero-card">
-        <strong>1000+</strong>
-        <span>betreute Kunden im Bereich CAD/CAM und Fertigung</span>
+        <strong>30+</strong>
+        <span>Jahre Erfahrung im CAD/CAM-Markt</span>
         <hr />
-        <strong>seit 1994</strong>
-        <span>Erfahrung mit CNC, Robotik und industrieller Software</span>
+        <strong>1000+</strong>
+        <span>betreute Kunden in Deutschland, Österreich und der Schweiz</span>
       </aside>
     </div>
   </section>
 
   <section class="section">
     <div class="container">
-      <h2>Klare Themen statt überladener Navigation.</h2>
-      <p class="section-intro">Die neue Website ist als schlanke, schnelle und suchmaschinenfreundliche B2B-Seite aufgebaut. Jede Hauptseite bekommt ein klares Ziel: informieren, Vertrauen aufbauen und Anfragen erzeugen.</p>
+      <h2>Ihre Vorteile mit Datentechnik Reitz</h2>
+      <p class="section-intro">Unsere Stärke liegt in der Verbindung von Software, Maschinenverständnis und praktischer Umsetzung. Wir beraten nicht nur theoretisch, sondern testen und schulen an realen CNC-Maschinen und Robotern.</p>
+      <div class="card-grid">
+        {benefits.map((benefit) => (
+          <article class="card">
+            <h3>{benefit}</h3>
+            <p>Praxisnah, lösungsorientiert und mit klarem Fokus auf messbare Ergebnisse in der Fertigung.</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2>Leistungen</h2>
+      <p class="section-intro">Die Struktur folgt der Canva-Basis: klare Themen, schnelle Orientierung und direkte Wege zu Beratung, Download und Kontakt.</p>
       <div class="card-grid">
         {cards.map((card) => (
           <article class="card">
@@ -74,12 +96,33 @@ const cards = [
   </section>
 
   <section class="section">
+    <div class="container">
+      <h2>Referenzen und Praxisberichte</h2>
+      <p class="section-intro">Die neue Seite soll später ausgewählte Erfolgsgeschichten aufnehmen, z. B. aus CNC-Programmierung, Roboterfräsen, P3D-Slicing und Automatisierung.</p>
+      <div class="card-grid">
+        <article class="card">
+          <h3>Effiziente CNC-Programmierung</h3>
+          <p>Praxisbeispiele zeigen, wie Rüstzeiten reduziert und Fertigungsprozesse sicherer geplant werden.</p>
+        </article>
+        <article class="card">
+          <h3>Automatisierung umgesetzt</h3>
+          <p>Von der ersten Idee über Simulation und Postprozessor bis zur realen Inbetriebnahme.</p>
+        </article>
+        <article class="card">
+          <h3>Robotik in der Fertigung</h3>
+          <p>Komplexe Roboteranwendungen für Fräsen, Drucken, Schweißen, Schneiden und Handling.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
     <div class="container cta-band">
       <div>
-        <h2>Erster Relaunch-Entwurf für cnc-technik.de</h2>
-        <p>Diese Version ist bewusst als technische Basis aufgebaut: schnell, pflegbar, erweiterbar und später mit Headless CMS kombinierbar.</p>
+        <h2>Bereit für die Zukunft der Fertigung?</h2>
+        <p>Wir prüfen gemeinsam, welche Lösung für Ihre Maschine, Ihren Roboter oder Ihren Fertigungsprozess sinnvoll ist.</p>
       </div>
-      <a class="button" href={sitePath('/kontakt')}>Nächsten Schritt planen</a>
+      <a class="button" href={sitePath('/kontakt')}>Kontakt aufnehmen</a>
     </div>
   </section>
 </BaseLayout>
