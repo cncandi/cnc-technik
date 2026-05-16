@@ -10,24 +10,17 @@ secondaryCtaHref: "/"
 order: 90
 ---
 
-## Der nächste Schritt
+## Nehmen Sie Kontakt mit uns auf
 
-Diese Kontaktseite ist zunächst als statische Seite angelegt. Für den produktiven Einsatz sollte später ein Formular über Netlify, Cloudflare Pages, Formspree oder eine eigene Schnittstelle ergänzt werden.
-
-### Empfohlene Anfragefelder
-
-- Name und Firma
-- E-Mail und Telefonnummer
-- Thema: ENCY, Robotik, P3D, SOLIDWORKS, Postprozessor, Schulung
-- kurze Projektbeschreibung
-- gewünschter Rückruftermin
+Wir freuen uns auf Ihre Anfrage zu CAD/CAM, CNC, Robotik, ENCY, P3D Slicer, SOLIDWORKS, Postprozessoren, Schulung oder Sonderentwicklung.
 
 ## Direkte Kontaktmöglichkeiten
 
-- E-Mail: info@cnc-technik.de
-- Telefon: bitte aktuelle Nummer aus der bestehenden Website übernehmen
-- Standort: Breidenstein bei Marburg
+- **Telefon:** +49 (6461) 759 343 7
+- **E-Mail:** info@cnc-technik.de
+- **Adresse:** Perfstraße 2, 35216 Breidenstein
+- **Öffnungszeiten:** Montag bis Freitag, 8:00 bis 17:00 Uhr
 
-## Wichtig für Analytics
+## Anfrageformular
 
-Alle Klicks auf E-Mail, Telefon, Downloads und Demo-Buttons sollten später als Ereignisse in GA4 erfasst werden.
+Bitte beschreiben Sie kurz, worum es geht. Wir melden uns anschließend mit einem passenden Vorschlag für Telefonat, Online-Termin oder Präsenztermin.
