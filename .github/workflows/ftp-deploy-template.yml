@@ -1,37 +1,27 @@
-name: Build and upload website by FTP
+name: Build website package without FTP upload
 
 on:
   workflow_dispatch:
-  push:
-    branches: [main]
 
 jobs:
-  build-and-upload:
+  build-only:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
+      - name: Prepare package folder
+        run: |
+          mkdir -p build-check
+          cp -R php-site/* build-check/
 
-      - name: Install dependencies
-        run: npm install
+      - name: Show package contents
+        run: find build-check -maxdepth 3 -type f | sort
 
-      - name: Build static website
-        run: npm run build
-        env:
-          PUBLIC_BASE_PATH: /
-          PUBLIC_SITE_URL: https://www.cnc-technik.de
-
-      - name: Upload dist folder by FTP
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-        with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: ./dist/
-          server-dir: ${{ secrets.FTP_SERVER_DIR }}
-          dangerous-clean-slate: false
+# FTP upload is intentionally disabled.
+# It will be enabled only after the complete website is finished and approved.
+# Required later as GitHub Secrets:
+# FTP_SERVER
+# FTP_USERNAME
+# FTP_PASSWORD
+# FTP_SERVER_DIR
