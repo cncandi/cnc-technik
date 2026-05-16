@@ -18,6 +18,15 @@ const pageTitle = title.includes('CNC-Technik') ? title : `${title} | CNC-Techni
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
     <link rel="icon" type="image/svg+xml" href={sitePath('/favicon.svg')} />
+    <script>
+      (function () {
+        var hash = window.location.hash || '';
+        var isIdentityAction = hash.indexOf('confirmation_token') !== -1 || hash.indexOf('invite_token') !== -1 || hash.indexOf('recovery_token') !== -1;
+        if (isIdentityAction && window.location.pathname !== '/admin/') {
+          window.location.replace('/admin/' + hash);
+        }
+      })();
+    </script>
   </head>
   <body>
     <header class="site-header">
@@ -79,21 +88,5 @@ const pageTitle = title.includes('CNC-Technik') ? title : `${title} | CNC-Techni
         </div>
       </div>
     </footer>
-
-    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-    <script>
-      window.addEventListener('load', () => {
-        if (!window.netlifyIdentity) return;
-        window.netlifyIdentity.init();
-        const hash = window.location.hash || '';
-        const isIdentityAction = hash.includes('confirmation_token') || hash.includes('invite_token') || hash.includes('recovery_token');
-        if (isIdentityAction) {
-          window.netlifyIdentity.open();
-        }
-        window.netlifyIdentity.on('login', () => {
-          window.location.href = '/admin/';
-        });
-      });
-    </script>
   </body>
 </html>
