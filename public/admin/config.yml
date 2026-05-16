@@ -1,10 +1,9 @@
 backend:
-  name: github
-  repo: cncandi/cnc-technik
+  name: git-gateway
   branch: main
 
 media_folder: public/uploads
-public_folder: /cnc-technik/uploads
+public_folder: /uploads
 
 locale: de
 
