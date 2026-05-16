@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /
+
+# Hinweis: Diese Datei verhindert die Indexierung der GitHub-Pages-Testseite.
+# Vor dem produktiven Livegang auf cnc-technik.de muss diese Datei angepasst oder entfernt werden.
