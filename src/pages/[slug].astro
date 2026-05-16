@@ -13,6 +13,7 @@ export async function getStaticPaths() {
 
 const { page } = Astro.props;
 const { Content } = await render(page);
+const isContactPage = page.data.slug === 'kontakt';
 ---
 <BaseLayout title={page.data.title} description={page.data.description}>
   <section class="hero">
@@ -39,6 +40,60 @@ const { Content } = await render(page);
     <div class="container content-wrap">
       <article class="prose">
         <Content />
+
+        {isContactPage && (
+          <form class="contact-form" name="kontakt" method="POST" data-netlify="true" data-netlify-honeypot="bot-field" action={sitePath('/danke')}>
+            <input type="hidden" name="form-name" value="kontakt" />
+            <p class="hidden-field">
+              <label>Bitte nicht ausfüllen: <input name="bot-field" /></label>
+            </p>
+
+            <div class="form-grid">
+              <label>
+                Name *
+                <input type="text" name="name" autocomplete="name" required />
+              </label>
+              <label>
+                Firma
+                <input type="text" name="firma" autocomplete="organization" />
+              </label>
+              <label>
+                E-Mail *
+                <input type="email" name="email" autocomplete="email" required />
+              </label>
+              <label>
+                Telefon
+                <input type="tel" name="telefon" autocomplete="tel" />
+              </label>
+            </div>
+
+            <label>
+              Thema
+              <select name="thema">
+                <option value="ENCY CAD/CAM">ENCY CAD/CAM</option>
+                <option value="Robotik">Robotik</option>
+                <option value="P3D Slicer">P3D Slicer</option>
+                <option value="SOLIDWORKS">SOLIDWORKS</option>
+                <option value="Postprozessor">Postprozessor</option>
+                <option value="Schulung und Support">Schulung und Support</option>
+                <option value="Sonderentwicklung">Sonderentwicklung</option>
+                <option value="Sonstiges">Sonstiges</option>
+              </select>
+            </label>
+
+            <label>
+              Nachricht *
+              <textarea name="nachricht" rows="7" required></textarea>
+            </label>
+
+            <label class="checkbox-row">
+              <input type="checkbox" name="datenschutz" required />
+              <span>Ich habe die Datenschutzhinweise gelesen und stimme der Verarbeitung meiner Angaben zur Kontaktaufnahme zu.</span>
+            </label>
+
+            <button class="button" type="submit">Nachricht senden</button>
+          </form>
+        )}
       </article>
       <aside class="aside">
         <h3>Projekt besprechen</h3>
