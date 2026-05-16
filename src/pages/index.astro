@@ -1,0 +1,85 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { sitePath } from '../utils/path';
+
+const cards = [
+  {
+    title: 'ENCY CAD/CAM',
+    text: 'Moderne CAD/CAM-Programmierung für CNC-Maschinen, Dreh-Fräs-Zentren und anspruchsvolle Fertigungsprozesse.',
+    href: '/ency',
+  },
+  {
+    title: 'Robotik & CAM',
+    text: 'Roboterprogrammierung, Simulation, Zusatzachsen, Postprozessoren und Prozessberatung für Industrieanwendungen.',
+    href: '/robotik',
+  },
+  {
+    title: 'P3D Slicer',
+    text: 'Slicing-Technologie für Roboter, 5-Achs-Anlagen, Non-Planar-Druck und großformatige additive Fertigung.',
+    href: '/p3d-slicer',
+  },
+  {
+    title: 'KUKA KRL Editor',
+    text: 'Spezialseite für KUKA-Anwender mit KRL-Beispielen, Editor-Konzept und späterer KI-Unterstützung.',
+    href: '/kuka',
+  },
+  {
+    title: 'SOLIDWORKS & Dassault',
+    text: 'Beratung und Einführung von SOLIDWORKS, DELMIA, CATIA und weiteren Dassault-Lösungen.',
+    href: '/solidworks',
+  },
+  {
+    title: 'Schulung & Support',
+    text: 'Praxisorientierte Unterstützung für CAD/CAM, CNC, Robotik, Postprozessoren und Fertigungsprozesse.',
+    href: '/schulung-support',
+  },
+];
+---
+<BaseLayout title="CNC-Technik Reitz" description="CAD/CAM, Robotik, ENCY, SOLIDWORKS und P3D Slicer von CAD/CAM Systeme Datentechnik Reitz.">
+  <section class="hero">
+    <div class="container hero-grid">
+      <div>
+        <span class="eyebrow">CAD/CAM · Robotik · Softwareentwicklung</span>
+        <h1>Software und Beratung für moderne CNC- und Roboterfertigung.</h1>
+        <p class="lead">CNC-Technik Reitz unterstützt Unternehmen seit 1994 bei CAD/CAM, Robotik, Postprozessoren, ENCY, SOLIDWORKS und eigener Software wie P3D Slicer.</p>
+        <div class="hero-actions">
+          <a class="button" href={sitePath('/kontakt')}>Projekt besprechen</a>
+          <a class="button secondary" href={sitePath('/robotik')}>Robotik ansehen</a>
+        </div>
+      </div>
+      <aside class="hero-card">
+        <strong>1000+</strong>
+        <span>betreute Kunden im Bereich CAD/CAM und Fertigung</span>
+        <hr />
+        <strong>seit 1994</strong>
+        <span>Erfahrung mit CNC, Robotik und industrieller Software</span>
+      </aside>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2>Klare Themen statt überladener Navigation.</h2>
+      <p class="section-intro">Die neue Website ist als schlanke, schnelle und suchmaschinenfreundliche B2B-Seite aufgebaut. Jede Hauptseite bekommt ein klares Ziel: informieren, Vertrauen aufbauen und Anfragen erzeugen.</p>
+      <div class="card-grid">
+        {cards.map((card) => (
+          <article class="card">
+            <h3>{card.title}</h3>
+            <p>{card.text}</p>
+            <a class="link" href={sitePath(card.href)}>Mehr erfahren →</a>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container cta-band">
+      <div>
+        <h2>Erster Relaunch-Entwurf für cnc-technik.de</h2>
+        <p>Diese Version ist bewusst als technische Basis aufgebaut: schnell, pflegbar, erweiterbar und später mit Headless CMS kombinierbar.</p>
+      </div>
+      <a class="button" href={sitePath('/kontakt')}>Nächsten Schritt planen</a>
+    </div>
+  </section>
+</BaseLayout>
