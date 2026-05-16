@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" role="img" aria-label="Datentechnik Reitz DTR Logo">
+  <rect width="500" height="500" rx="96" fill="#ffffff"/>
+  <rect x="22" y="22" width="456" height="456" rx="82" fill="#111827"/>
+  <path d="M104 128h92c76 0 126 48 126 122s-50 122-126 122h-92V128zm83 184c37 0 61-24 61-62s-24-62-61-62h-18v124h18z" fill="#f97316"/>
+  <path d="M304 188h-58v-60h190v60h-58v184h-74V188z" fill="#ffffff" opacity="0.94"/>
+  <path d="M106 393h288" stroke="#f97316" stroke-width="22" stroke-linecap="round"/>
+</svg>
