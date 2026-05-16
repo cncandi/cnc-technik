@@ -30,8 +30,14 @@ const isContactPage = page.data.slug === 'kontakt';
         </div>
       </div>
       <aside class="hero-card">
-        <strong>Fokus</strong>
-        <span>klare Landingpage mit Nutzen, Anwendungen, Vertrauen und Anfrageziel</span>
+        {page.data.heroImage ? (
+          <img class="hero-image" src={sitePath(page.data.heroImage)} alt={page.data.heroImageAlt ?? page.data.title} loading="eager" />
+        ) : (
+          <>
+            <strong>Fokus</strong>
+            <span>klare Landingpage mit Nutzen, Anwendungen, Vertrauen und Anfrageziel</span>
+          </>
+        )}
       </aside>
     </div>
   </section>
