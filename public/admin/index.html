@@ -7,46 +7,7 @@
     <title>CNC-Technik CMS</title>
   </head>
   <body>
-    <script>
-      window.CMS_MANUAL_INIT = true;
-    </script>
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
     <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
-    <script>
-      CMS.init({
-        config: {
-          backend: {
-            name: 'github',
-            repo: 'cncandi/cnc-technik',
-            branch: 'main'
-          },
-          media_folder: 'public/uploads',
-          public_folder: '/cnc-technik/uploads',
-          locale: 'de',
-          collections: [
-            {
-              name: 'pages',
-              label: 'Seiten',
-              folder: 'src/content/pages',
-              create: true,
-              slug: '{{slug}}',
-              extension: 'md',
-              format: 'frontmatter',
-              fields: [
-                { label: 'Titel', name: 'title', widget: 'string' },
-                { label: 'Beschreibung', name: 'description', widget: 'text' },
-                { label: 'URL-Slug', name: 'slug', widget: 'string' },
-                { label: 'Kleine Überschrift', name: 'eyebrow', widget: 'string', required: false },
-                { label: 'Button Text', name: 'ctaLabel', widget: 'string', required: false },
-                { label: 'Button Link', name: 'ctaHref', widget: 'string', required: false },
-                { label: 'Zweiter Button Text', name: 'secondaryCtaLabel', widget: 'string', required: false },
-                { label: 'Zweiter Button Link', name: 'secondaryCtaHref', widget: 'string', required: false },
-                { label: 'Reihenfolge', name: 'order', widget: 'number', required: false },
-                { label: 'Inhalt', name: 'body', widget: 'markdown' }
-              ]
-            }
-          ]
-        }
-      });
-    </script>
   </body>
 </html>
