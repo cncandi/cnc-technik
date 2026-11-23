@@ -45,14 +45,15 @@ jobs:
           me=request("users/me?context=edit")
           print("WordPress authenticated user:",me.get("id"))
           summary=[]
-          if os.environ.get("GITHUB_EVENT_NAME")=="workflow_dispatch":
-              print("Connection test successful; no posts changed")
-              sys.exit(0)
-          event=json.load(open(os.environ["GITHUB_EVENT_PATH"]))
           files=set()
-          for commit in event.get("commits",[]):
-              files.update(commit.get("added",[]))
-              files.update(commit.get("modified",[]))
+          if os.environ.get("GITHUB_EVENT_NAME")=="workflow_dispatch":
+              files={str(p) for p in pathlib.Path("wordpress-queue").glob("*.json")}
+              print("Manual run: processing",len(files),"queued WordPress requests")
+          else:
+              event=json.load(open(os.environ["GITHUB_EVENT_PATH"]))
+              for commit in event.get("commits",[]):
+                  files.update(commit.get("added",[]))
+                  files.update(commit.get("modified",[]))
           for name in sorted(files):
               if not name.startswith("wordpress-queue/") or not name.endswith(".json"): continue
               p=pathlib.Path(name)
