@@ -1,0 +1,65 @@
+name: WordPress REST API bridge
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'wordpress-queue/*.json'
+      - '.github/workflows/wordpress-bridge.yml'
+permissions:
+  contents: read
+jobs:
+  wordpress:
+    runs-on: ubuntu-latest
+    env:
+      WORDPRESS_URL: ${{ vars.WORDPRESS_URL }}
+      WORDPRESS_USERNAME: ${{ vars.WORDPRESS_USERNAME }}
+      WORDPRESS_APP_PASSWORD: ${{ secrets.WORDPRESS_APP_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate WordPress connection and process draft requests
+        shell: python
+        run: |
+          import os, json, base64, urllib.request, urllib.error, pathlib, sys
+          url=os.environ.get("WORDPRESS_URL","").rstrip("/")
+          user=os.environ.get("WORDPRESS_USERNAME","")
+          password=os.environ.get("WORDPRESS_APP_PASSWORD","")
+          if not all([url,user,password]):
+              sys.exit("Missing WORDPRESS_URL, WORDPRESS_USERNAME or WORDPRESS_APP_PASSWORD")
+          if not url.startswith("https://"):
+              sys.exit("WORDPRESS_URL must use HTTPS")
+          token=base64.b64encode(f"{user}:{password}".encode()).decode()
+          headers={"Authorization":f"Basic {token}","Accept":"application/json"}
+          def request(endpoint, payload=None):
+              h=dict(headers)
+              if payload is not None:
+                  h["Content-Type"]="application/json; charset=utf-8"
+              req=urllib.request.Request(url+"/wp-json/wp/v2/"+endpoint,headers=h,data=json.dumps(payload).encode() if payload is not None else None,method="POST" if payload is not None else "GET")
+              try:
+                  with urllib.request.urlopen(req,timeout=25) as resp:
+                      return json.load(resp)
+              except urllib.error.HTTPError as e:
+                  sys.exit(f"WordPress HTTP {e.code}: {e.read(500).decode(errors='replace')}")
+          me=request("users/me?context=edit")
+          print("WordPress authenticated successfully; user ID:",me.get("id"))
+          event=os.environ.get("GITHUB_EVENT_NAME")
+          if event=="workflow_dispatch":
+              print("Connection test successful. No posts created.")
+              sys.exit(0)
+          event_json=json.load(open(os.environ["GITHUB_EVENT_PATH"]))
+          files=set()
+          for commit in event_json.get("commits",[]):
+              files.update(commit.get("added",[]))
+              files.update(commit.get("modified",[]))
+          for name in sorted(files):
+              if not name.startswith("wordpress-queue/") or not name.endswith(".json"):
+                  continue
+              p=pathlib.Path(name)
+              if not p.is_file():
+                  continue
+              post=json.loads(p.read_text(encoding="utf-8"))
+              if not isinstance(post,dict) or not post.get("title") or not post.get("content"):
+                  sys.exit(f"Invalid post request in {name}: title and content required")
+              payload={"title":post["title"],"content":post["content"],"status":"draft"}
+              if post.get("excerpt"): payload["excerpt"]=post["excerpt"]
+              result=request("posts",payload)
+              print("Created WordPress DRAFT ID:",result.get("id"),"URL:",result.get("link"))
