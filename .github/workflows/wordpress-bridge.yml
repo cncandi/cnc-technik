@@ -29,20 +29,23 @@ jobs:
               sys.exit("WORDPRESS_URL must use HTTPS")
           token=base64.b64encode(f"{user}:{password}".encode()).decode()
           headers={"Authorization":f"Basic {token}","Accept":"application/json"}
-          def request(endpoint, payload=None):
+          def request(endpoint, payload=None, binary=None, filename=None):
               h=dict(headers)
-              if payload is not None:
+              if binary is not None:
+                  h["Content-Type"]="image/png" if filename.endswith(".png") else "image/jpeg"
+                  h["Content-Disposition"]=f'attachment; filename="{filename}"'
+              elif payload is not None:
                   h["Content-Type"]="application/json; charset=utf-8"
-              req=urllib.request.Request(url+"/wp-json/wp/v2/"+endpoint,headers=h,data=json.dumps(payload).encode() if payload is not None else None,method="POST" if payload is not None else "GET")
+              body=binary if binary is not None else (json.dumps(payload).encode("utf-8") if payload is not None else None)
+              req=urllib.request.Request(url+"/wp-json/wp/v2/"+endpoint,headers=h,data=body,method="POST" if body is not None else "GET")
               try:
-                  with urllib.request.urlopen(req,timeout=25) as resp:
+                  with urllib.request.urlopen(req,timeout=30) as resp:
                       return json.load(resp)
               except urllib.error.HTTPError as e:
                   sys.exit(f"WordPress HTTP {e.code}: {e.read(500).decode(errors='replace')}")
           me=request("users/me?context=edit")
-          print("WordPress authenticated successfully; user ID:",me.get("id"))
-          event=os.environ.get("GITHUB_EVENT_NAME")
-          if event=="workflow_dispatch":
+          print("WordPress authenticated; user ID:",me.get("id"))
+          if os.environ.get("GITHUB_EVENT_NAME")=="workflow_dispatch":
               print("Connection test successful. No posts created.")
               sys.exit(0)
           event_json=json.load(open(os.environ["GITHUB_EVENT_PATH"]))
@@ -54,12 +57,32 @@ jobs:
               if not name.startswith("wordpress-queue/") or not name.endswith(".json"):
                   continue
               p=pathlib.Path(name)
-              if not p.is_file():
-                  continue
+              if not p.is_file(): continue
               post=json.loads(p.read_text(encoding="utf-8"))
               if not isinstance(post,dict) or not post.get("title") or not post.get("content"):
                   sys.exit(f"Invalid post request in {name}: title and content required")
-              payload={"title":post["title"],"content":post["content"],"status":"draft"}
+              status=post.get("status","draft")
+              if status not in ("draft","publish"):
+                  sys.exit("status must be draft or publish")
+              payload={"title":post["title"],"content":post["content"],"status":status}
               if post.get("excerpt"): payload["excerpt"]=post["excerpt"]
+              if post.get("image_url"):
+                  from urllib.parse import urlparse
+                  image_url=post["image_url"]
+                  parsed=urlparse(image_url)
+                  if parsed.scheme!="https" or not parsed.hostname:
+                      sys.exit("image_url must be HTTPS")
+                  with urllib.request.urlopen(urllib.request.Request(image_url,headers={"User-Agent":"DTR-WordPress-Bridge/1.0"}),timeout=30) as resp:
+                      data=resp.read(15000001)
+                  if len(data)>15000000: sys.exit("Image exceeds 15 MB")
+                  if data.startswith(bytes.fromhex("89504e470d0a1a0a")):
+                      filename="formnext-waam-impeller.png"
+                  elif data.startswith(bytes.fromhex("ffd8ff")):
+                      filename="formnext-waam-impeller.jpg"
+                  else:
+                      sys.exit("Only PNG and JPEG supported")
+                  media=request("media",binary=data,filename=filename)
+                  payload["featured_media"]=media["id"]
+                  print("Uploaded featured image ID:",media["id"])
               result=request("posts",payload)
-              print("Created WordPress DRAFT ID:",result.get("id"),"URL:",result.get("link"))
+              print("Created WordPress",status.upper(),"ID:",result.get("id"),"URL:",result.get("link"))
