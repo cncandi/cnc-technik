@@ -5,7 +5,7 @@ on:
     paths:
       - 'wordpress-queue/*.json'
 permissions:
-  contents: read
+  contents: write
 jobs:
   wordpress:
     runs-on: ubuntu-latest
@@ -13,6 +13,8 @@ jobs:
       WORDPRESS_URL: ${{ vars.WORDPRESS_URL }}
       WORDPRESS_USERNAME: ${{ vars.WORDPRESS_USERNAME }}
       WORDPRESS_APP_PASSWORD: ${{ secrets.WORDPRESS_APP_PASSWORD }}
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
     steps:
       - uses: actions/checkout@v4
       - name: Publish or update WordPress posts and report URLs
@@ -92,5 +94,21 @@ jobs:
               if not link: sys.exit("WordPress returned no article URL")
               print("WordPress", "UPDATED" if existing else "CREATED", status, "ID:",result["id"],"URL:",link)
               summary.append(f"- [{post['title']}]({link}) — {status}, ID {result['id']}")
+              report={"title":post["title"],"url":link,"wordpress_id":result["id"],"status":result["status"],"featured_media":result.get("featured_media"),"queue_file":name}
+              report_path="wordpress-results/"+p.stem+".json"
+              api="https://api.github.com/repos/"+os.environ["GH_REPO"]+"/contents/"+report_path
+              gh_headers={"Authorization":"Bearer "+os.environ["GH_TOKEN"],"Accept":"application/vnd.github+json","X-GitHub-Api-Version":"2022-11-28"}
+              try:
+                  with urllib.request.urlopen(urllib.request.Request(api,headers=gh_headers),timeout=30) as resp:
+                      existing_report=json.load(resp)
+                      existing_sha=existing_report.get("sha")
+              except urllib.error.HTTPError as e:
+                  if e.code!=404: raise
+                  existing_sha=None
+              write={"message":"Record WordPress publication URL for "+p.stem,"content":base64.b64encode(json.dumps(report,ensure_ascii=False,indent=2).encode()).decode()}
+              if existing_sha: write["sha"]=existing_sha
+              req=urllib.request.Request(api,data=json.dumps(write).encode(),headers={**gh_headers,"Content-Type":"application/json"},method="PUT")
+              with urllib.request.urlopen(req,timeout=30) as resp:
+                  print("Saved WordPress publication report:",report_path,resp.status)
           with open(os.environ["GITHUB_STEP_SUMMARY"],"a") as f:
               f.write("## WordPress publication results\n"+("\n".join(summary) if summary else "No queue posts changed")+"\n")
