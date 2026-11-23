@@ -63,6 +63,10 @@ jobs:
               if not slug: sys.exit("Missing stable slug in "+name)
               matches=request("posts?context=edit&status=any&slug="+quote(slug))
               if len(matches)>1: sys.exit("Multiple WordPress posts with slug "+slug)
+              if not matches:
+                  candidates=request("posts?context=edit&status=any&search="+quote(post["title"]))
+                  matches=[item for item in candidates if item.get("title",{}).get("raw",item.get("title",{}).get("rendered",""))==post["title"]]
+              if len(matches)>1: sys.exit("Multiple posts with matching title; refusing duplicate")
               existing=matches[0] if matches else None
               payload={"title":post["title"],"content":post["content"],"status":status,"slug":slug}
               if post.get("excerpt"): payload["excerpt"]=post["excerpt"]
