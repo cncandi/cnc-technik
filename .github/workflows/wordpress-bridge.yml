@@ -23,7 +23,7 @@ jobs:
       GH_REPO: ${{ github.repository }}
     steps:
       - uses: actions/checkout@v4
-      - name: Publish or update WordPress posts and report URLs
+      - name: Publish or update WordPress posts and pages
         shell: python
         run: |
           import os, json, base64, urllib.request, urllib.error, pathlib, sys
@@ -71,17 +71,29 @@ jobs:
               if not p.is_file(): continue
               post=json.loads(p.read_text(encoding="utf-8"))
               if not isinstance(post,dict) or not post.get("title") or not post.get("content"): sys.exit("Missing title or content in "+name)
+              kind=post.get("type","post")
+              if kind not in ("post","page"): sys.exit("Unsupported content type: "+kind)
+              collection="pages" if kind=="page" else "posts"
               status=post.get("status","draft")
               if status not in ("draft","publish"): sys.exit("Invalid post status")
               slug=post.get("slug")
               if not slug: sys.exit("Missing stable slug in "+name)
-              matches=request("posts?context=edit&status=any&slug="+quote(slug))
+              matches=request(collection+"?context=edit&status=any&slug="+quote(slug))
               if len(matches)>1: sys.exit("Multiple WordPress posts with slug "+slug)
               if not matches:
-                  candidates=request("posts?context=edit&status=any&search="+quote(post["title"]))
+                  candidates=request(collection+"?context=edit&status=any&search="+quote(post["title"]))
                   matches=[item for item in candidates if item.get("title",{}).get("raw",item.get("title",{}).get("rendered",""))==post["title"]]
               if len(matches)>1: sys.exit("Multiple posts with matching title; refusing duplicate")
               existing=matches[0] if matches else None
+              # Never overwrite a German original when preparing an English page.
+              source_id=post.get("translation_of")
+              if source_id is not None:
+                  if kind!="page" or not isinstance(source_id,int) or source_id<=0: sys.exit("translation_of requires a valid source page ID")
+                  source=request("pages/"+str(source_id)+"?context=edit")
+                  if source.get("id")!=source_id: sys.exit("Source page not found")
+                  if existing and existing["id"]==source_id: sys.exit("Refusing to overwrite original page")
+                  if status=="publish" and not post.get("approved_for_publication",False): sys.exit("English page requires explicit publication approval")
+              if kind=="page" and existing and post.get("page_id") and existing["id"]!=post["page_id"]: sys.exit("Page ID and slug mismatch")
               payload={"title":post["title"],"content":post["content"],"status":status,"slug":slug}
               if post.get("excerpt"): payload["excerpt"]=post["excerpt"]
               if post.get("image_url") and (not existing or not existing.get("featured_media")):
@@ -95,18 +107,18 @@ jobs:
                   else: sys.exit("Only PNG/JPEG images are supported")
                   media=request("media",binary=data,filename=filename)
                   payload["featured_media"]=media["id"]
-              if post.get("category_slug"):
+              if kind=="post" and post.get("category_slug"):
                   cats=request("categories?slug="+quote(post["category_slug"]))
                   if not cats: sys.exit("WordPress category not found: "+post["category_slug"])
                   payload["categories"]=[cats[0]["id"]]
-              endpoint="posts/"+str(existing["id"]) if existing else "posts"
+              endpoint=collection+"/"+str(existing["id"]) if existing else collection
               result=request(endpoint,payload)
               if result.get("status")!=status: sys.exit("Unexpected WordPress status: "+str(result.get("status")))
               link=result.get("link")
               if not link: sys.exit("WordPress returned no article URL")
               print("WordPress", "UPDATED" if existing else "CREATED", status, "ID:",result["id"],"URL:",link)
               summary.append(f"- [{post['title']}]({link}) — {status}, ID {result['id']}")
-              report={"title":post["title"],"url":link,"wordpress_id":result["id"],"status":result["status"],"featured_media":result.get("featured_media"),"queue_file":name}
+              report={"title":post["title"],"url":link,"wordpress_id":result["id"],"status":result["status"],"featured_media":result.get("featured_media"),"queue_file":name,"type":kind,"translation_of":source_id}
               report_path="wordpress-results/"+p.stem+".json"
               api="https://api.github.com/repos/"+os.environ["GH_REPO"]+"/contents/"+report_path
               gh_headers={"Authorization":"Bearer "+os.environ["GH_TOKEN"],"Accept":"application/vnd.github+json","X-GitHub-Api-Version":"2022-11-28"}
