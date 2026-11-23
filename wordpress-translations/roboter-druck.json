@@ -1,0 +1,34 @@
+{
+  "source_url": "https://cnc-technik.de/roboter-druck/",
+  "source_slug": "roboter-druck",
+  "source_language": "de",
+  "target_language": "en",
+  "target_slug": "robot-3d-printing",
+  "default_language": "de",
+  "language_switcher": {
+    "position": "top",
+    "style": "small-flags",
+    "languages": [
+      {
+        "code": "de",
+        "flag": "🇩🇪",
+        "label": "Deutsch",
+        "url": "https://cnc-technik.de/roboter-druck/"
+      },
+      {
+        "code": "en",
+        "flag": "🇬🇧",
+        "label": "English",
+        "url": null
+      }
+    ]
+  },
+  "requirements": [
+    "Keep original German page and layout unchanged",
+    "Preserve images, embedded videos and internal links",
+    "Translate all German page sections into English",
+    "Create English page as draft until reviewed",
+    "Configure reciprocal hreflang and flag links after English page is published"
+  ],
+  "state": "configuration-only; not deployed to WordPress"
+}
