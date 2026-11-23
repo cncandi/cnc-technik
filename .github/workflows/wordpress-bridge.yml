@@ -1,6 +1,12 @@
 name: WordPress REST API bridge
 on:
   workflow_dispatch:
+    inputs:
+      queue_file:
+        description: 'WordPress queue JSON filename (without path)'
+        required: true
+        default: 'formnext-2026-waam-p3d-ency-20261123.json'
+        type: string
   push:
     paths:
       - 'wordpress-queue/*.json'
@@ -47,7 +53,12 @@ jobs:
           summary=[]
           files=set()
           if os.environ.get("GITHUB_EVENT_NAME")=="workflow_dispatch":
-              files={str(p) for p in pathlib.Path("wordpress-queue").glob("*.json")}
+              queue_file=os.environ.get("GITHUB_EVENT_PATH")
+              dispatch=json.load(open(queue_file))
+              selected=dispatch.get("inputs",{}).get("queue_file","")
+              if not selected or pathlib.PurePath(selected).name!=selected or not selected.endswith(".json"):
+                  sys.exit("Invalid queue filename")
+              files={"wordpress-queue/"+selected}
               print("Manual run: processing",len(files),"queued WordPress requests")
           else:
               event=json.load(open(os.environ["GITHUB_EVENT_PATH"]))
